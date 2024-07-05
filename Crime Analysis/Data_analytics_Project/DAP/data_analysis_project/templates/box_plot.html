@@ -1,0 +1,126 @@
+<div class="container">
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Pie Chart</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Histogram</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="messages-tab" data-bs-toggle="tab" data-bs-target="#messages" type="button" role="tab" aria-controls="messages" aria-selected="false">Box Plot</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="false">Scatter Plot</button>
+      </li>
+    </ul>
+    
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+        
+            <!-- Pie Chat -->
+    
+            <div class="container">
+              <!-- Plotly Pie plot container -->
+              <div id="box-plot-container">{{ plot_html_pie|safe }}</div>
+          
+              <!-- Customization options form for Pie plot -->
+              <form id="pie-plot-form" method="get" action="{% url 'exploratory_data_analysis_tab' %}">
+                  <label for="pie_feature">Select Feature:</label>
+                  <select name="pie_feature" id="pie_feature">
+                      {% for feature in customization_options_pie.features_pie %}
+                          <option value="{{ feature }}" {% if feature == customization_options_pie.selected_feature_pie %}selected{% endif %}>{{ feature }}</option>
+                      {% endfor %}
+                  </select>
+                  <input type="submit" value="Update Pie Chart">
+              </form>
+          </div>
+    
+      </div>
+      <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+        
+        <!-- Histogram -->
+        <div class="container">
+          <!-- Plotly histogram container -->
+          <div id="histogram-plot-container">{{ plot_html|safe }}</div>
+      
+          <!-- Customization options form for histogram -->
+          <form id="hist-plot-form" method="get" action="{% url 'exploratory_data_analysis_tab' %}">
+              <label for="feature">Select Feature:</label>
+              <select name="feature form-select" aria-label="Default select example" id="feature">
+                  {% for feature in customization_options.features %}
+                      <option value="{{ feature }}" {% if feature == customization_options.selected_feature %}selected{% endif %}>{{ feature }}</option>
+                  {% endfor %}
+              </select>
+      
+              <label for="bins">Number of Bins:</label>
+              <input type="number" name="bins" id="bins" value="{{ customization_options.selected_bins }}" min="1" max="100">
+      
+              <input type="submit" value="Update Histogram Plot">
+          </form>
+      </div>
+    
+      </div>
+      <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab" tabindex="0">
+        
+              <!-- Box Plot -->
+    
+              <div class="container">
+                <!-- Plotly box plot container -->
+                <div id="box-plot-container">{{ box_plot_html|safe }}</div>
+            
+                <!-- Customization options form for box plot -->
+                <form id="box-plot-form" method="get" action="{% url 'exploratory_data_analysis_tab' %}">
+                    <label for="box_cat">Select Category:</label>
+                    <select name="box_cat" id="box_cat">
+                        {% for feature in box_cus_options.categories %}
+                            <option value="{{ feature }}" {% if feature == box_cus_options.selected_category %}selected{% endif %}>{{ feature }}</option>
+                        {% endfor %}
+                    </select>
+            
+                    <label for="box_val">Select Value:</label>
+                    <select name="box_val" id="box_val">
+                        {% for feature in box_cus_options.categories %}
+                            <option value="{{ feature }}" {% if feature == box_cus_options.selected_value %}selected{% endif %}>{{ feature }}</option>
+                        {% endfor %}
+                    </select>
+                    
+                    <input type="submit" value="Update Box Plot">
+                </form>
+            </div>
+    
+      </div>
+      <div class="tab-pane" id="settings" role="tabpanel" aria-labelledby="settings-tab" tabindex="0">
+        
+              <!-- Scatter Plot -->
+    
+              <div class="container">
+                <!-- Plotly Scatter plot container -->
+                <div id="box-plot-container">{{ plot_html_scatter|safe }}</div>
+            
+                <!-- Customization options form for Scatter plot -->
+                <form id="scatter-plot-form" method="get" action="{% url 'exploratory_data_analysis_tab' %}">
+                    <label for="scatter_x">Select X Feature:</label>
+                    <select name="scatter_x" id="scatter_x">
+                        {% for feature in customization_options_scatter.features %}
+                            <option value="{{ feature }}" {% if feature == customization_options_scatter.selected_x_feature %}selected{% endif %}>{{ feature }}</option>
+                        {% endfor %}
+                    </select>
+            
+                    <label for="scatter_y">Select Y Feature:</label>
+                    <select name="scatter_y" id="scatter_y">
+                        {% for feature in customization_options_scatter.features %}
+                            <option value="{{ feature }}" {% if feature == customization_options_scatter.selected_y_feature %}selected{% endif %}>{{ feature }}</option>
+                        {% endfor %}
+                    </select>
+                    
+                    <input type="submit" value="Update Scatter Plot">
+                </form>
+            </div>
+    
+      </div>
+    </div>
+    
+    </div>

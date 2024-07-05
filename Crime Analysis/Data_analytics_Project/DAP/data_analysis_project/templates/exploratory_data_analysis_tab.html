@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+</head>
+<body>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <!-- <a class="navbar-brand" href="#">Project</a> -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'data_tab' %}">Data</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'descriptive_statistics_tab' %}">Descriptive Statistics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'exploratory_data_analysis_tab' %}">Exploratory Data Analysis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile_view' %}" target="_blank">Data Profile</a>
+                    </li>
+                    <!-- Add a new navigation item for Linear Regression -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'linear_regression' %}">Linear Regression</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+      <!-- Bootstrap and Plotly scripts -->
+      {% load static %}
+      <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+      
+
+
+<div class="container pb-5">
+
+
+            <!-- Pie Chat -->
+
+            <div class="container">
+              <!-- Plotly Pie plot container -->
+              <div id="box-plot-container">{{ plot_html_pie|safe }}</div>
+          
+              <!-- Customization options form for Pie plot -->
+              <form id="pie-plot-form" method="get" action="{% url 'exploratory_data_analysis_tab' %}">
+                  <label for="pie_feature">Select Feature:</label>
+                  <select name="pie_feature" id="pie_feature">
+                      {% for feature in customization_options_pie.features_pie %}
+                          <option value="{{ feature }}" {% if feature == customization_options_pie.selected_feature_pie %}selected{% endif %}>{{ feature }}</option>
+                      {% endfor %}
+                  </select>
+                  <input type="submit" value="Update Pie Chart">
+              </form>
+          </div>
+        
+          
+              <!-- Histogram -->
+        
+              <div class="container">
+                  <!-- Plotly histogram container -->
+                  <div id="histogram-plot-container">{{ plot_html|safe }}</div>
+              
+                  <!-- Customization options form for histogram -->
+                  <form id="hist-plot-form" method="get" action="{% url 'exploratory_data_analysis_tab' %}">
+                      <label for="feature">Select Feature:</label>
+                      <select name="feature form-select" aria-label="Default select example" id="feature">
+                          {% for feature in customization_options.features %}
+                              <option value="{{ feature }}" {% if feature == customization_options.selected_feature %}selected{% endif %}>{{ feature }}</option>
+                          {% endfor %}
+                      </select>
+              
+                      <label for="bins">Number of Bins:</label>
+                      <input type="number" name="bins" id="bins" value="{{ customization_options.selected_bins }}" min="1" max="100">
+              
+                      <input type="submit" value="Update Histogram Plot">
+                  </form>
+              </div>
+              
+              <!-- Box Plot -->
+        
+              <div class="container">
+                  <!-- Plotly box plot container -->
+                  <div id="box-plot-container">{{ box_plot_html|safe }}</div>
+              
+                  <!-- Customization options form for box plot -->
+                  <form id="box-plot-form" method="get" action="{% url 'exploratory_data_analysis_tab' %}">
+                      <label for="box_cat">Select Category:</label>
+                      <select name="box_cat" id="box_cat">
+                          {% for feature in box_cus_options.categories %}
+                              <option value="{{ feature }}" {% if feature == box_cus_options.selected_category %}selected{% endif %}>{{ feature }}</option>
+                          {% endfor %}
+                      </select>
+              
+                      <label for="box_val">Select Value:</label>
+                      <select name="box_val" id="box_val">
+                          {% for feature in box_cus_options.categories %}
+                              <option value="{{ feature }}" {% if feature == box_cus_options.selected_value %}selected{% endif %}>{{ feature }}</option>
+                          {% endfor %}
+                      </select>
+                      
+                      <input type="submit" value="Update Box Plot">
+                  </form>
+              </div>
+        
+        
+              <!-- Scatter Plot -->
+        
+              <div class="container">
+                <!-- Plotly Scatter plot container -->
+                <div id="box-plot-container">{{ plot_html_scatter|safe }}</div>
+            
+                <!-- Customization options form for Scatter plot -->
+                <form id="scatter-plot-form" method="get" action="{% url 'exploratory_data_analysis_tab' %}">
+                    <label for="scatter_x">Select X Feature:</label>
+                    <select name="scatter_x" id="scatter_x">
+                        {% for feature in customization_options_scatter.features %}
+                            <option value="{{ feature }}" {% if feature == customization_options_scatter.selected_x_feature %}selected{% endif %}>{{ feature }}</option>
+                        {% endfor %}
+                    </select>
+            
+                    <label for="scatter_y">Select Y Feature:</label>
+                    <select name="scatter_y" id="scatter_y">
+                        {% for feature in customization_options_scatter.features %}
+                            <option value="{{ feature }}" {% if feature == customization_options_scatter.selected_y_feature %}selected{% endif %}>{{ feature }}</option>
+                        {% endfor %}
+                    </select>
+                    
+                    <input type="submit" value="Update Scatter Plot">
+                </form>
+            </div>
+
+
+</div>
+      
+
+
+
+      <!-- Customization options script -->
+      <script>
+          // Function to update the histogram plot
+          function updateHistogramPlot() {
+              const selectedFeature = document.getElementById('feature').value;
+              const selectedBins = document.getElementById('bins').value;
+      
+              // Redirect to the same page with updated parameters
+              window.location.href = `{% url 'exploratory_data_analysis_tab' %}?feature=${selectedFeature}&bins=${selectedBins}`;
+          }
+      
+          // Add event listener for the histogram form submission
+          document.getElementById('hist-plot-form').addEventListener('submit', function(event) {
+              event.preventDefault();
+              updateHistogramPlot();
+          });
+      
+          // Function to update the box plot
+          function updateBoxPlot() {
+              const selectedCategory = document.getElementById('box_cat').value;
+              const selectedValue = document.getElementById('box_val').value;
+      
+              // Redirect to the same page with updated parameters
+              window.location.href = `{% url 'exploratory_data_analysis_tab' %}?category=${selectedCategory}&value=${selectedValue}`;
+          }
+      
+          // Add event listener for the box plot form submission
+          document.getElementById('box-plot-form').addEventListener('submit', function(event) {
+              event.preventDefault();
+              updateBoxPlot();
+          });
+
+          // Function to update the scatter plot
+          function updateScatterPlot() {
+              const selected_x = document.getElementById('scatter_x').value;
+              const selected_y = document.getElementById('scatter_y').value;
+      
+              // Redirect to the same page with updated parameters
+              window.location.href = `{% url 'exploratory_data_analysis_tab' %}?x_feature=${selected_x}&y_feature=${selected_y}`;
+          }
+      
+          // Add event listener for the scatter plot form submission
+          document.getElementById('scatter-plot-form').addEventListener('submit', function(event) {
+              event.preventDefault();
+              updateScatterPlot();
+          });
+
+          // Function to update the Pie plot
+          function updatePiePlot() {
+              const feature_pie = document.getElementById('pie_feature').value;
+      
+              // Redirect to the same page with updated parameters
+              window.location.href = `{% url 'exploratory_data_analysis_tab' %}?feature_pie=${feature_pie}`;
+          }
+      
+          // Add event listener for the Pie plot form submission
+          document.getElementById('pie-plot-form').addEventListener('submit', function(event) {
+              event.preventDefault();
+              updatePiePlot();
+          });
+
+      </script>
+      
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>
